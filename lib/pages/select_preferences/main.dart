@@ -10,17 +10,12 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   bool didClickCurrency = false;
-  bool remove = false;
-  Offset offset = Offset.zero;
 
   @override
   Widget build(BuildContext context) {
     void refresh() {
       setState(() {
-        print('clicked');
-        print(didClickCurrency);
         didClickCurrency = !didClickCurrency;
-        offset -= const Offset(2, 0);
       });
     }
 
@@ -45,17 +40,9 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(
                   height: 70,
                 ),
-                // !didClickCurrency
-                //     ? PreferencesSelection(notifyParent: refresh)
-                //     : Container(),
-                AnimatedSlide(
-                  offset: offset,
-                  duration: const Duration(milliseconds: 500),
-                  curve: Curves.easeInOut,
-                  child: !remove
-                      ? PreferencesSelection(notifyParent: refresh)
-                      : Container(),
-                ),
+                !didClickCurrency
+                    ? PreferencesSelection(notifyParent: refresh)
+                    : Container(),
               ],
             ),
           ),

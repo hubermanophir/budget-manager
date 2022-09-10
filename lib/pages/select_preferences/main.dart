@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'currency_selection_page.dart';
+import './welcome_page.dart';
+import './budget_selection_page.dart';
+import './reset_date_selection_page.dart';
 
 class GettingStarted extends StatefulWidget {
   const GettingStarted({Key? key}) : super(key: key);
@@ -13,17 +18,40 @@ class _GettingStarted extends State<GettingStarted> {
 
   // the index of the current page
   int _activePage = 0;
+  IconData selectedCurrency = FontAwesomeIcons.shekelSign;
 
   // this list holds all the pages
   // all of them are constructed in the very end of this file for readability
-  final List<Widget> _pages = [
-    const PageOne(),
-    const PageTwo(),
-    const PageThree()
-  ];
+
+  void nextPage() {
+    setState(() {
+      _activePage += 1;
+    });
+  }
+
+  void setSelectedCurrencyIcon(IconData icon) {
+    setState(() {
+      selectedCurrency = icon;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> _pages = [
+      WelcomePage(
+        index: 0,
+        pageController: _pageController,
+      ),
+      CurrencySelection(
+          index: 1,
+          pageController: _pageController,
+          setSelectedCurrencyIcon: setSelectedCurrencyIcon),
+      BudgetSelect(
+        index: 2,
+        pageController: _pageController,
+      ),
+      ResetDateSelector()
+    ];
     return Scaffold(
       body: Stack(
         children: [
@@ -76,54 +104,5 @@ class _GettingStarted extends State<GettingStarted> {
         ],
       ),
     );
-  }
-}
-
-// Page One
-class PageOne extends StatelessWidget {
-  const PageOne({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.center,
-      color: Colors.white,
-      child: const Text(
-        'KindaCode.com',
-        style: TextStyle(fontSize: 30, color: Colors.blue),
-      ),
-    );
-  }
-}
-
-// Page Two
-class PageTwo extends StatelessWidget {
-  const PageTwo({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        alignment: Alignment.center,
-        color: Colors.white,
-        child: const Text(
-          'Green Page',
-          style: TextStyle(fontSize: 50, color: Colors.blue),
-        ));
-  }
-}
-
-// Page Three
-class PageThree extends StatelessWidget {
-  const PageThree({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        alignment: Alignment.center,
-        color: Colors.white,
-        child: const Text(
-          'Blue Page',
-          style: TextStyle(fontSize: 50, color: Colors.blue),
-        ));
   }
 }

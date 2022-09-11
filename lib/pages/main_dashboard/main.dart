@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../models/payment_model.dart';
 import '../../models/payments_database.dart';
+import 'package:fl_chart/fl_chart.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -14,7 +15,6 @@ class _DashboardPageState extends State<DashboardPage> {
   bool isLoading = false;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     refreshPayments();
   }
@@ -22,18 +22,28 @@ class _DashboardPageState extends State<DashboardPage> {
   void refreshPayments() async {
     setState(() => {isLoading = true});
     payments = await DatabaseConnect().getAllPayments();
-    setState(() => {isLoading = true});
+    setState(() => {isLoading = false});
   }
+
+  Map<String, double> dataMap = {
+    "Flutter": 5,
+    "React": 3,
+    "Xamarin": 2,
+    "Ionic": 2,
+  };
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: ElevatedButton(
-          onPressed: () {
-            // refreshPayments();
-            print(payments);
-          },
-          child: Text('test')),
+    return Scaffold(
+      appBar: AppBar(title: Text('Dashboard')),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          !isLoading && payments.isNotEmpty
+              ? Center(child: CircularProgressIndicator())
+              : Center(child: CircularProgressIndicator()),
+        ],
+      ),
     );
   }
 }

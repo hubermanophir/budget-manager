@@ -16,12 +16,12 @@ class DatabaseConnect {
   }
 
   Future<void> _createDB(Database db, int version) async {
-    await db.execute('''
-      CREATE TABLE PAYMENTS(
+    return await db.execute('''
+      CREATE TABLE payments(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT
-        creationDate TEXT
-        amount FLOAT
+        name TEXT,
+        creationDate TEXT,
+        amount DOUBLE,
         category TEXT
       )
 ''');
@@ -51,14 +51,28 @@ class DatabaseConnect {
             name: payments[index]['name'],
             amount: payments[index]['amount'],
             creationDate: DateTime.parse(payments[index]['creationDate']),
-            category: payments[index]['category']));
+            category: payments[index]['category'])).toList();
   }
 
   Future<Payment> getPaymentById(String id) async {
     final db = await database;
     int firstIndex = 0;
-    List<Map<String, dynamic>> payment =
-        await db.query('payments', where: 'id == ?', whereArgs: [id]);
+    List<Map<String, dynamic>> payment = await db.query('payments',
+        orderBy: 'creationDate DESC', where: 'id == ?', whereArgs: [id]);
+    return Payment(
+        name: payment[firstIndex]['name'],
+        amount: payment[firstIndex]['amount'],
+        creationDate: payment[firstIndex]['creationDate'],
+        category: payment[firstIndex]['category']);
+  }
+
+  Future<Payment> getPaymentByCategory(String category) async {
+    final db = await database;
+    int firstIndex = 0;
+    List<Map<String, dynamic>> payment = await db.query('payments',
+        orderBy: 'creationDate DESC',
+        where: 'category == ?',
+        whereArgs: [category]);
     return Payment(
         name: payment[firstIndex]['name'],
         amount: payment[firstIndex]['amount'],

@@ -1,7 +1,9 @@
+import 'dart:ffi';
+
 class Payment {
   int? id;
   final String name;
-  final int amount;
+  final double amount;
   final DateTime creationDate;
   final String category;
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:numberpicker/numberpicker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ResetDateSelector extends StatefulWidget {
   final int dayOfMonthForReset;
@@ -20,6 +21,7 @@ class ResetDateSelector extends StatefulWidget {
 class _ResetDateSelectorState extends State<ResetDateSelector> {
   @override
   Widget build(BuildContext context) {
+    SharedPreferences prefs;
     return SafeArea(
       child: Scaffold(
         body: Column(
@@ -30,7 +32,11 @@ class _ResetDateSelectorState extends State<ResetDateSelector> {
               value: widget.dayOfMonthForReset,
               minValue: 1,
               maxValue: 28,
-              onChanged: (value) => widget.changeDayOfMonth(value),
+              onChanged: (value) async => {
+                widget.changeDayOfMonth(value),
+                prefs = await SharedPreferences.getInstance(),
+                await prefs.setInt('resetDay', value),
+              },
             ),
             Center(
                 child: ElevatedButton(

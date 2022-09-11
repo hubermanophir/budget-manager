@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class BudgetSelect extends StatefulWidget {
   int index;
@@ -19,6 +20,8 @@ class BudgetSelect extends StatefulWidget {
 class _BudgetSelectState extends State<BudgetSelect> {
   @override
   Widget build(BuildContext context) {
+    SharedPreferences prefs;
+
     return Scaffold(
         body: SafeArea(
             child: Column(
@@ -48,7 +51,12 @@ class _BudgetSelectState extends State<BudgetSelect> {
         ),
         Center(
             child: ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
+                  int budgetInt = int.tryParse(widget.budget) != null
+                      ? int.parse(widget.budget)
+                      : 0;
+                  prefs = await SharedPreferences.getInstance();
+                  await prefs.setInt('budget', budgetInt);
                   FocusScopeNode currentFocus = FocusScope.of(context);
 
                   if (!currentFocus.hasPrimaryFocus) {

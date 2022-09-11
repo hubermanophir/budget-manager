@@ -22,7 +22,7 @@ class WelcomePage extends StatelessWidget {
               child: ElevatedButton(
                   onPressed: () {
                     pageController.animateToPage(index + 1,
-                        duration: const Duration(milliseconds: 300),
+                        duration: const Duration(milliseconds: 180),
                         curve: Curves.easeIn);
                   },
                   child: const Text('Get Started')),

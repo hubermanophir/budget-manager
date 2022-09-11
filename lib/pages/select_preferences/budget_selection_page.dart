@@ -2,25 +2,21 @@ import 'package:flutter/material.dart';
 
 class BudgetSelect extends StatefulWidget {
   int index;
+  String budget;
   final PageController pageController;
-  BudgetSelect({
-    super.key,
-    required this.pageController,
-    required this.index,
-  });
+  final Function changeBudget;
+  BudgetSelect(
+      {super.key,
+      required this.pageController,
+      required this.index,
+      required this.changeBudget,
+      required this.budget});
 
   @override
   State<BudgetSelect> createState() => _BudgetSelectState();
 }
 
 class _BudgetSelectState extends State<BudgetSelect> {
-  var budget = '0';
-  void changeBudget(String value) {
-    setState(() {
-      budget = value;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,21 +27,21 @@ class _BudgetSelectState extends State<BudgetSelect> {
       children: [
         Center(
           child: Text(
-            'My monthly budget is: ${budget != '' ? budget : '0'}',
-            style: TextStyle(
+            'My monthly budget is: ${widget.budget != '' ? widget.budget : '0'}',
+            style: const TextStyle(
               fontSize: 20,
             ),
             textAlign: TextAlign.center,
           ),
         ),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 100, vertical: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 100, vertical: 16),
           child: TextField(
             onChanged: ((value) {
-              changeBudget(value);
+              widget.changeBudget(value);
             }),
             keyboardType: TextInputType.number,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               border: OutlineInputBorder(),
             ),
           ),
@@ -59,10 +55,10 @@ class _BudgetSelectState extends State<BudgetSelect> {
                     currentFocus.unfocus();
                   }
                   widget.pageController.animateToPage(widget.index + 1,
-                      duration: const Duration(milliseconds: 300),
+                      duration: const Duration(milliseconds: 180),
                       curve: Curves.easeIn);
                 },
-                child: Text('Done')))
+                child: const Text('Done')))
       ],
     )));
   }

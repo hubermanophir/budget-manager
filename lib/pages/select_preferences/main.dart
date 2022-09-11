@@ -4,22 +4,23 @@ import 'currency_selection_page.dart';
 import './welcome_page.dart';
 import './budget_selection_page.dart';
 import './reset_date_selection_page.dart';
+import './summary_page.dart';
 
-class GettingStarted extends StatefulWidget {
-  const GettingStarted({Key? key}) : super(key: key);
+class SelectPreferences extends StatefulWidget {
+  const SelectPreferences({Key? key}) : super(key: key);
 
   @override
-  State<GettingStarted> createState() => _GettingStarted();
+  State<SelectPreferences> createState() => _SelectPreferences();
 }
 
-class _GettingStarted extends State<GettingStarted> {
+class _SelectPreferences extends State<SelectPreferences> {
   // declare and initizlize the page controller
   final PageController _pageController = PageController(initialPage: 0);
-
+  String _budget = '0';
   // the index of the current page
   int _activePage = 0;
   IconData selectedCurrency = FontAwesomeIcons.shekelSign;
-
+  int _dayOfMonthForReset = 1;
   // this list holds all the pages
   // all of them are constructed in the very end of this file for readability
 
@@ -35,6 +36,18 @@ class _GettingStarted extends State<GettingStarted> {
     });
   }
 
+  void changeBudget(String value) {
+    setState(() {
+      _budget = value;
+    });
+  }
+
+  void changeDayOfMonth(int day) {
+    setState(() {
+      _dayOfMonthForReset = day;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final List<Widget> _pages = [
@@ -47,10 +60,20 @@ class _GettingStarted extends State<GettingStarted> {
           pageController: _pageController,
           setSelectedCurrencyIcon: setSelectedCurrencyIcon),
       BudgetSelect(
-        index: 2,
+          index: 2,
+          pageController: _pageController,
+          changeBudget: changeBudget,
+          budget: _budget),
+      ResetDateSelector(
+        dayOfMonthForReset: _dayOfMonthForReset,
+        changeDayOfMonth: changeDayOfMonth,
+        index: 3,
         pageController: _pageController,
       ),
-      ResetDateSelector()
+      SummaryPage(
+          dayOfMonthForReset: _dayOfMonthForReset,
+          budget: _budget,
+          selectedCurrency: selectedCurrency)
     ];
     return Scaffold(
       body: Stack(
@@ -85,7 +108,7 @@ class _GettingStarted extends State<GettingStarted> {
                           child: InkWell(
                             onTap: () {
                               _pageController.animateToPage(index,
-                                  duration: const Duration(milliseconds: 300),
+                                  duration: const Duration(milliseconds: 180),
                                   curve: Curves.easeIn);
                             },
                             child: CircleAvatar(

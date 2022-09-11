@@ -49,7 +49,7 @@ class _CurrencySelectionState extends State<CurrencySelection> {
                         prefs = await SharedPreferences.getInstance(),
                         await prefs.setString('currency', option.id),
                         widget.pageController.animateToPage(widget.index + 1,
-                            duration: const Duration(milliseconds: 300),
+                            duration: const Duration(milliseconds: 180),
                             curve: Curves.easeIn),
                         widget.setSelectedCurrencyIcon(option.icon)
                       },
